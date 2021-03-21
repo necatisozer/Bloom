@@ -35,14 +35,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigate
+import androidx.navigation.compose.rememberNavController
 import com.necatisozer.bloom.R
 import com.necatisozer.bloom.ui.components.BloomButton
 import com.necatisozer.bloom.ui.components.BloomTextButton
+import com.necatisozer.bloom.ui.screen.login.LOGIN_SCREEN
 import com.necatisozer.bloom.ui.theme.BloomTheme
 
+const val WELCOME_SCREEN = "welcome"
+
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier) {
-    Surface(modifier = modifier.fillMaxSize()) {
+fun WelcomeScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        color = MaterialTheme.colors.primary,
+        modifier = modifier.fillMaxSize()
+    ) {
         Image(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = R.drawable.welcome_bg),
@@ -84,7 +96,9 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             BloomTextButton(
-                onClick = { /*TODO*/ }
+                onClick = {
+                    navController.navigate(LOGIN_SCREEN)
+                }
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = 32.dp),
@@ -99,6 +113,14 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
 @Composable
 fun WelcomeScreenPreview() {
     BloomTheme {
-        WelcomeScreen()
+        WelcomeScreen(rememberNavController())
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WelcomeScreenDarkPreview() {
+    BloomTheme(darkTheme = true) {
+        WelcomeScreen(rememberNavController())
     }
 }

@@ -16,7 +16,13 @@
 package com.necatisozer.bloom.ui
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.necatisozer.bloom.ui.screen.WELCOME_SCREEN
 import com.necatisozer.bloom.ui.screen.WelcomeScreen
+import com.necatisozer.bloom.ui.screen.login.LOGIN_SCREEN
+import com.necatisozer.bloom.ui.screen.login.LoginScreen
 import com.necatisozer.bloom.ui.theme.BloomTheme
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 
@@ -24,7 +30,12 @@ import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 fun BloomApp() {
     BloomTheme {
         ProvideWindowInsets {
-            WelcomeScreen()
+            val navController = rememberNavController()
+
+            NavHost(navController, startDestination = WELCOME_SCREEN) {
+                composable(WELCOME_SCREEN) { WelcomeScreen(navController) }
+                composable(LOGIN_SCREEN) { LoginScreen(navController) }
+            }
         }
     }
 }

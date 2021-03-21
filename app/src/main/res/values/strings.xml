@@ -10,8 +10,21 @@
       the License.
       -->
     <string name="app_name">Bloom</string>
+
     <string name="welcome_subtitle">Beautiful home garden solutions</string>
     <string name="welcome_create_account">Create account</string>
     <string name="welcome_login">Log in</string>
+
+    <string name="login_login_with_email">Log in with email</string>
+    <string name="login_email_address_placeholder">Email address</string>
+    <string name="login_password_placeholder">Password (8+ characters)</string>
+    <string name="login_terms_1">By clicking below, you agree to our </string>
+    <string name="login_terms_2">Terms of Use</string>
+    <string name="login_terms_3"> and consent to our </string>
+    <string name="login_terms_4">Privacy Policy</string>
+    <string name="login_terms_5">.</string>
+    <string name="login_login">Log in</string>
+    <string name="login_invalid_email">Invalid email</string>
+    <string name="login_invalid_password">Password should be at least 8 character</string>
 
 </resources>
