@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.necatisozer.bloom.ui.screen
+package com.necatisozer.bloom.ui.screen.welcome
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -41,10 +41,8 @@ import androidx.navigation.compose.rememberNavController
 import com.necatisozer.bloom.R
 import com.necatisozer.bloom.ui.components.BloomButton
 import com.necatisozer.bloom.ui.components.BloomTextButton
-import com.necatisozer.bloom.ui.screen.login.LOGIN_SCREEN
+import com.necatisozer.bloom.ui.screen.Screen
 import com.necatisozer.bloom.ui.theme.BloomTheme
-
-const val WELCOME_SCREEN = "welcome"
 
 @Composable
 fun WelcomeScreen(
@@ -97,7 +95,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(8.dp))
             BloomTextButton(
                 onClick = {
-                    navController.navigate(LOGIN_SCREEN)
+                    navController.navigate(Screen.Login.route)
                 }
             ) {
                 Text(

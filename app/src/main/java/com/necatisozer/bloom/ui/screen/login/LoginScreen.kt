@@ -28,11 +28,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -44,11 +44,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigate
+import androidx.navigation.compose.popUpTo
 import com.necatisozer.bloom.R
 import com.necatisozer.bloom.ui.components.BloomButton
 import com.necatisozer.bloom.ui.components.BloomOutlinedTextField
-
-const val LOGIN_SCREEN = "login"
+import com.necatisozer.bloom.ui.screen.Screen
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun LoginScreen(
@@ -57,6 +59,21 @@ fun LoginScreen(
     loginViewModel: LoginViewModel = viewModel(),
 ) {
     val viewState by loginViewModel.viewState.collectAsState()
+
+    LaunchedEffect(loginViewModel.viewEvents) {
+        loginViewModel.viewEvents.collect { event ->
+            when (event) {
+                LoginViewEvent.NavigateToHome -> {
+                    navController.navigate(Screen.Home.route) {
+                        launchSingleTop = true
+                        popUpTo(Screen.Welcome.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     Surface(modifier = modifier.fillMaxSize()) {
         Column(
@@ -109,8 +126,6 @@ fun LoginScreen(
                     color = MaterialTheme.colors.error,
                 )
             }
-
-            LocalDensity.current.density
 
             Text(
                 text = buildAnnotatedString {

@@ -27,4 +27,13 @@
     <string name="login_invalid_email">Invalid email</string>
     <string name="login_invalid_password">Password should be at least 8 character</string>
 
+    <string name="home_search_placeholder">Search</string>
+    <string name="home_theme_title">Browse themes</string>
+    <string name="home_plants_title">Design your home garden</string>
+
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_favorites">Favorites</string>
+    <string name="bottom_nav_profile">Profile</string>
+    <string name="bottom_nav_cart">Cart</string>
+
 </resources>

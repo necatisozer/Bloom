@@ -15,15 +15,39 @@
  */
 package com.necatisozer.bloom.ui
 
+import CartScreen
+import FavoritesScreen
+import HomeScreen
+import ProfileScreen
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.KEY_ROUTE
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigate
+import androidx.navigation.compose.popUpTo
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.necatisozer.bloom.ui.screen.WELCOME_SCREEN
-import com.necatisozer.bloom.ui.screen.WelcomeScreen
-import com.necatisozer.bloom.ui.screen.login.LOGIN_SCREEN
+import com.google.accompanist.insets.navigationBarsPadding
+import com.necatisozer.bloom.R
+import com.necatisozer.bloom.ui.screen.Screen
+import com.necatisozer.bloom.ui.screen.bottomnav.BottomNavModel
 import com.necatisozer.bloom.ui.screen.login.LoginScreen
+import com.necatisozer.bloom.ui.screen.welcome.WelcomeScreen
 import com.necatisozer.bloom.ui.theme.BloomTheme
 
 @Composable
@@ -32,9 +56,68 @@ fun BloomApp() {
         ProvideWindowInsets {
             val navController = rememberNavController()
 
-            NavHost(navController, startDestination = WELCOME_SCREEN) {
-                composable(WELCOME_SCREEN) { WelcomeScreen(navController) }
-                composable(LOGIN_SCREEN) { LoginScreen(navController) }
+            val bottomNavItems = listOf(
+                BottomNavModel(Icons.Filled.Home, R.string.bottom_nav_home, Screen.Home),
+                BottomNavModel(
+                    Icons.Filled.FavoriteBorder,
+                    R.string.bottom_nav_favorites,
+                    Screen.Favorites
+                ),
+                BottomNavModel(
+                    Icons.Filled.AccountCircle,
+                    R.string.bottom_nav_profile,
+                    Screen.Profile
+                ),
+                BottomNavModel(Icons.Filled.ShoppingCart, R.string.bottom_nav_cart, Screen.Cart),
+            )
+
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+
+            Scaffold(
+                modifier = Modifier.navigationBarsPadding(),
+                bottomBar = {
+                    bottomNavItems.forEach { bottomNavModel ->
+                        if (currentRoute == bottomNavModel.screen.route) {
+                            BottomNavigation(
+                                backgroundColor = MaterialTheme.colors.primary
+                            ) {
+                                bottomNavItems.forEach { bottomNavItem ->
+                                    BottomNavigationItem(
+                                        icon = {
+                                            Icon(
+                                                imageVector = bottomNavItem.icon,
+                                                contentDescription = stringResource(id = bottomNavItem.labelResourceId),
+                                            )
+                                        },
+                                        label = { Text(stringResource(id = bottomNavItem.labelResourceId)) },
+                                        selected = currentRoute == bottomNavItem.screen.route,
+                                        onClick = {
+                                            navController.navigate(bottomNavItem.screen.route) {
+                                                // Pop up to the start destination of the graph to
+                                                // avoid building up a large stack of destinations
+                                                // on the back stack as users select items
+                                                popUpTo(Screen.Home.route) {}
+                                                // Avoid multiple copies of the same destination when
+                                                // reselecting the same item
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            ) {
+                NavHost(navController, startDestination = Screen.Home.route) {
+                    composable(Screen.Welcome.route) { WelcomeScreen(navController) }
+                    composable(Screen.Login.route) { LoginScreen(navController) }
+                    composable(Screen.Home.route) { HomeScreen(navController) }
+                    composable(Screen.Favorites.route) { FavoritesScreen(navController) }
+                    composable(Screen.Profile.route) { ProfileScreen(navController) }
+                    composable(Screen.Cart.route) { CartScreen(navController) }
+                }
             }
         }
     }

@@ -17,13 +17,19 @@ package com.necatisozer.bloom.ui.screen.login
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 class LoginViewModel : ViewModel() {
     private val _viewState = MutableStateFlow(LoginViewState())
     val viewState: StateFlow<LoginViewState> = _viewState.asStateFlow()
+
+    private val _viewEvents = Channel<LoginViewEvent>()
+    val viewEvents: Flow<LoginViewEvent> = _viewEvents.receiveAsFlow()
 
     fun onEmailAddressChange(value: String) {
         _viewState.value = _viewState.value.copy(
@@ -40,11 +46,15 @@ class LoginViewModel : ViewModel() {
     }
 
     fun onLoginClick() {
-        validateEmail()
-        validatePassword()
+        val isEmailValid = validateEmail()
+        val isPasswordValid = validatePassword()
+
+        if (isEmailValid && isPasswordValid) {
+            _viewEvents.offer(LoginViewEvent.NavigateToHome)
+        }
     }
 
-    private fun validateEmail() {
+    private fun validateEmail(): Boolean {
         val email = viewState.value.emailAddress
         val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
@@ -53,9 +63,11 @@ class LoginViewModel : ViewModel() {
                 emailAddressError = true,
             )
         }
+
+        return isEmailValid
     }
 
-    private fun validatePassword() {
+    private fun validatePassword(): Boolean {
         val password = viewState.value.password
         val isPasswordValid = password.length >= 8
 
@@ -64,5 +76,7 @@ class LoginViewModel : ViewModel() {
                 passwordError = true,
             )
         }
+
+        return isPasswordValid
     }
 }
