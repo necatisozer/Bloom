@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.KEY_ROUTE
 import androidx.navigation.compose.NavHost
@@ -49,6 +50,8 @@ import com.necatisozer.bloom.ui.screen.bottomnav.BottomNavModel
 import com.necatisozer.bloom.ui.screen.login.LoginScreen
 import com.necatisozer.bloom.ui.screen.welcome.WelcomeScreen
 import com.necatisozer.bloom.ui.theme.BloomTheme
+import com.necatisozer.bloom.utils.Constants
+import kotlinx.coroutines.InternalCoroutinesApi
 
 @Composable
 fun BloomApp() {
@@ -110,7 +113,7 @@ fun BloomApp() {
                     }
                 }
             ) {
-                NavHost(navController, startDestination = Screen.Home.route) {
+                NavHost(navController, startDestination = Screen.Welcome.route) {
                     composable(Screen.Welcome.route) { WelcomeScreen(navController) }
                     composable(Screen.Login.route) { LoginScreen(navController) }
                     composable(Screen.Home.route) { HomeScreen(navController) }

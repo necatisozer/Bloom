@@ -15,6 +15,7 @@
  */
 package com.necatisozer.bloom.ui.screen.login
 
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -50,6 +52,8 @@ import com.necatisozer.bloom.R
 import com.necatisozer.bloom.ui.components.BloomButton
 import com.necatisozer.bloom.ui.components.BloomOutlinedTextField
 import com.necatisozer.bloom.ui.screen.Screen
+import com.necatisozer.bloom.utils.Constants
+import com.necatisozer.bloom.utils.LocalDataManager
 import kotlinx.coroutines.flow.collect
 
 @Composable
@@ -59,6 +63,7 @@ fun LoginScreen(
     loginViewModel: LoginViewModel = viewModel(),
 ) {
     val viewState by loginViewModel.viewState.collectAsState()
+    val context = LocalContext.current.applicationContext
 
     LaunchedEffect(loginViewModel.viewEvents) {
         loginViewModel.viewEvents.collect { event ->
@@ -69,6 +74,7 @@ fun LoginScreen(
                         popUpTo(Screen.Welcome.route) {
                             inclusive = true
                         }
+                        LocalDataManager.instance.setSharedPreferenceBoolean(context = context,Constants.HAVE_A_LOGIN,true)
                     }
                 }
             }
