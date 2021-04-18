@@ -55,7 +55,6 @@ import kotlinx.coroutines.InternalCoroutinesApi
 
 @Composable
 fun BloomApp() {
-    Constants.CURRENT_CONTEXT = LocalContext.current.applicationContext
     BloomTheme {
         ProvideWindowInsets {
             val navController = rememberNavController()
